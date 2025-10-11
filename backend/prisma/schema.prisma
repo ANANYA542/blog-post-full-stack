@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+  
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String
+  name      String?
+  createdAt DateTime  @default(now())
+  comments  Comment[]
+  likes     Like[]
+  posts     Post[]    @relation("author_posts")
+  shares    Share[]
+}
+
+model Post {
+  id         String    @id @default(uuid())
+  title      String
+  content    String
+  excerpt    String?
+  image      String?
+  published  Boolean   @default(false)
+  authorId   String?
+  categoryId String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  comments   Comment[]
+  likes      Like[]
+  author     User?     @relation("author_posts", fields: [authorId], references: [id])
+  category   Category? @relation(fields: [categoryId], references: [id])
+  shares     Share[]
+
+  @@index([authorId], map: "Post_authorId_fkey")
+  @@index([categoryId], map: "Post_categoryId_fkey")
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  color       String?
+  icon        String?
+  createdAt   DateTime @default(now())
+  posts       Post[]
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  authorId  String
+  postId    String
+  createdAt DateTime @default(now())
+  author    User     @relation(fields: [authorId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
+
+  @@index([authorId], map: "Comment_authorId_fkey")
+  @@index([postId], map: "Comment_postId_fkey")
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, postId])
+  @@index([postId], map: "Like_postId_fkey")
+}
+
+model Share {
+  id        String   @id @default(uuid())
+  userId    String
+  postId    String
+  platform  String?
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([postId], map: "Share_postId_fkey")
+  @@index([userId], map: "Share_userId_fkey")
+}
