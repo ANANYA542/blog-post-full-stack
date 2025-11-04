@@ -20,5 +20,6 @@ app.use('/api/categories', categoriesRoutes);
 
 app.get('/', (req, res) => res.send('Prisma blog backend'));
 
-const port = process.env.PORT || 4000;
-app.listen(port, () => console.log(`Server listening on ${port}`));
+// const port = process.env.PORT || 4000;
+// app.listen(port, () => console.log(`Server listening on ${port}`));
+module.exports = app;
