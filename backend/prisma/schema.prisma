@@ -1,11 +1,11 @@
 generator client {
   provider = "prisma-client-js"
-  
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -33,12 +33,12 @@ model Post {
   updatedAt  DateTime  @updatedAt
   comments   Comment[]
   likes      Like[]
-  author     User?     @relation("author_posts", fields: [authorId], references: [id])
-  category   Category? @relation(fields: [categoryId], references: [id])
   shares     Share[]
+  author     User?     @relation("author_posts", fields: [authorId], references: [id], map: "fk_post_author")
+  category   Category? @relation(fields: [categoryId], references: [id], map: "fk_post_category")
 
-  @@index([authorId], map: "Post_authorId_fkey")
-  @@index([categoryId], map: "Post_categoryId_fkey")
+  @@index([authorId], map: "idx_post_author")
+  @@index([categoryId], map: "idx_post_category")
 }
 
 model Category {
@@ -58,11 +58,11 @@ model Comment {
   authorId  String
   postId    String
   createdAt DateTime @default(now())
-  author    User     @relation(fields: [authorId], references: [id])
-  post      Post     @relation(fields: [postId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id], map: "fk_comment_author")
+  post      Post     @relation(fields: [postId], references: [id], map: "fk_comment_post")
 
-  @@index([authorId], map: "Comment_authorId_fkey")
-  @@index([postId], map: "Comment_postId_fkey")
+  @@index([authorId], map: "idx_comment_author")
+  @@index([postId], map: "idx_comment_post")
 }
 
 model Like {
@@ -70,11 +70,11 @@ model Like {
   userId    String
   postId    String
   createdAt DateTime @default(now())
-  post      Post     @relation(fields: [postId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id], map: "fk_like_post")
+  user      User     @relation(fields: [userId], references: [id], map: "fk_like_user")
 
   @@unique([userId, postId])
-  @@index([postId], map: "Like_postId_fkey")
+  @@index([postId], map: "idx_like_post")
 }
 
 model Share {
@@ -83,9 +83,9 @@ model Share {
   postId    String
   platform  String?
   createdAt DateTime @default(now())
-  post      Post     @relation(fields: [postId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id], map: "fk_share_post")
+  user      User     @relation(fields: [userId], references: [id], map: "fk_share_user")
 
-  @@index([postId], map: "Share_postId_fkey")
-  @@index([userId], map: "Share_userId_fkey")
+  @@index([postId], map: "idx_share_post")
+  @@index([userId], map: "idx_share_user")
 }
