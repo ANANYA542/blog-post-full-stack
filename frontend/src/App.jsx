@@ -11,6 +11,8 @@ import NotFound from './pages/NotFound.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 export default function App() {
+  console.log("Frontend loaded successfully!");
+  console.log("API URL:", import.meta.env.VITE_API_URL);
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900">
       <Navbar />
@@ -37,3 +39,4 @@ export default function App() {
     </div>
   )
 }
+
