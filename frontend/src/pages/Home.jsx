@@ -40,6 +40,7 @@ const mockSections = {
 }
 
 export default function Home() {
+  console.log("🏠 Home component rendered");
   const { user } = useAuth()
   const [sections, setSections] = useState({})
   const [trendingPosts, setTrendingPosts] = useState([])
