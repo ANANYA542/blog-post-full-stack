@@ -11,6 +11,7 @@ const dashboardRoutes = require('./routes/dashboard');
 const categoriesRoutes = require('./routes/categories');
 
 const app = express();
+app.use(cors());
 
 app.use(bodyParser.json());
 
