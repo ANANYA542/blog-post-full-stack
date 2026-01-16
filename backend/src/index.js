@@ -21,11 +21,8 @@ app.use(cors({
   credentials: true
 }));
 
-// Handle preflight requests
-app.options("*", cors({
-  origin: true,
-  credentials: true
-}));
+// Preflight is handled by the app.use(cors(...)) above, or we can use regex if explicit handling is needed.
+// app.options('*', cors()); // Removed due to Express 5 compatibility issue with '*' string path.
 
 app.use(bodyParser.json());
 
