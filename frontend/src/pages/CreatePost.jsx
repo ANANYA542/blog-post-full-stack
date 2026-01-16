@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Toast from '../components/Toast'
 import { useAuth } from '../context/AuthContext.jsx'
-import api from '../services/api'
+import api from '../utils/api'
 
 export default function CreatePost() {
   const { user } = useAuth()
