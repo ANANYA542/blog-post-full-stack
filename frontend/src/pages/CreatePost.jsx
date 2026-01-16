@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Toast from '../components/Toast'
 import { useAuth } from '../context/AuthContext.jsx'
+import api from '../services/api'
 
 export default function CreatePost() {
   const { user } = useAuth()
@@ -14,14 +15,24 @@ export default function CreatePost() {
   const [loading, setLoading] = useState(false)
   const [toast, setToast] = useState(null) // { message, type }
 
-  // Categories with ID mapping (In a real app, fetch from backend)
-  const categories = [
-    { id: 'science-fiction', name: 'Science & Innovation' },
-    { id: 'technology', name: 'Technology' },
-    { id: 'travel-tourism', name: 'Travel & Lifestyle' },
-    { id: 'health-wellness', name: 'Health & Wellness' },
-    { id: 'art-culture', name: 'Art & Culture' }
-  ]
+  // Categories state
+  const [categories, setCategories] = useState([])
+  const [catLoading, setCatLoading] = useState(true)
+
+  // Fetch categories on mount
+  useEffect(() => {
+    const fetchCats = async () => {
+      try {
+        const { data } = await api.get('/categories')
+        setCategories(data)
+      } catch (e) {
+        console.error("Failed to fetch categories", e)
+      } finally {
+        setCatLoading(false)
+      }
+    }
+    fetchCats()
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -46,7 +57,7 @@ export default function CreatePost() {
         content,
         excerpt: content.slice(0, 150) + '...',
         image: image || null,
-        categoryId: 1 // TODO: Dynamic Category Logic
+        categoryId: category // Uses the real UUID from state
       })
       navigate('/')
     } catch (err) {
