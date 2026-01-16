@@ -1,16 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
 }
 
-/* Global styles with dark mode support */
+/* Global styles */
 body {
-  @apply text-gray-900 bg-white dark:text-gray-100 dark:bg-gray-900 transition-colors duration-200;
+  @apply text-brand-dark bg-beige-50 transition-colors duration-200;
   font-family: 'Inter', system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Playfair Display', serif;
 }
 
 .container-responsive {
@@ -40,14 +49,19 @@ body {
 }
 
 /* Custom utilities */
-.gradient-text {
-  @apply bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent;
-}
-
+/* Custom utilities */
 .card-hover {
-  @apply hover:shadow-lg hover:-translate-y-1 transition-all duration-200;
+  @apply hover:shadow-md hover:-translate-y-0.5 transition-all duration-300;
 }
 
 .section-divider {
-  @apply border-t border-gray-200 dark:border-gray-700;
+  @apply border-t border-beige-200;
+}
+
+.btn-primary {
+  @apply bg-brand-green text-white px-4 py-2 rounded-lg hover:bg-brand-hover transition-colors font-medium;
+}
+
+.btn-secondary {
+  @apply bg-beige-200 text-brand-dark px-4 py-2 rounded-lg hover:bg-beige-300 transition-colors font-medium;
 }

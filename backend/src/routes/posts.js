@@ -2,12 +2,22 @@ const express = require('express');
 const prisma = require('../prisma');
 const router = express.Router();
 
+const auth = require('../middleware/auth');
+
 // Create post
-router.post('/', async (req, res) => {
-  const { title, content, excerpt, image, authorId, categoryId } = req.body;
+router.post('/', auth, async (req, res) => {
+  const { title, content, excerpt, image, categoryId } = req.body;
   try {
     const post = await prisma.post.create({
-      data: { title, content, excerpt, image, authorId, categoryId, published: true },
+      data: { 
+        title, 
+        content, 
+        excerpt, 
+        image, 
+        authorId: req.user.id, // Securely from token
+        categoryId, 
+        published: true 
+      },
       include: { author: true, category: true }
     });
     res.json(post);
@@ -100,8 +110,8 @@ router.delete('/:id', async (req, res) => {
 });
 
 // Like/unlike post
-router.post('/:id/like', async (req, res) => {
-  const { userId } = req.body;
+router.post('/:id/like', auth, async (req, res) => {
+  const userId = req.user.id; // Securely from token
   try {
     const existing = await prisma.like.findUnique({
       where: { userId_postId: { userId, postId: req.params.id } }
@@ -136,11 +146,15 @@ router.get('/:id/comments', async (req, res) => {
 });
 
 // Add comment to post
-router.post('/:id/comments', async (req, res) => {
-  const { content, authorId } = req.body;
+router.post('/:id/comments', auth, async (req, res) => {
+  const { content } = req.body;
   try {
     const comment = await prisma.comment.create({
-      data: { content, authorId, postId: req.params.id },
+      data: { 
+        content, 
+        authorId: req.user.id, // Securely from token
+        postId: req.params.id 
+      },
       include: { author: { select: { id: true, name: true, email: true } } }
     });
     res.json(comment);

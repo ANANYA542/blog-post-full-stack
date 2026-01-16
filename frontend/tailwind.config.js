@@ -8,13 +8,22 @@ export default {
   theme: {
     extend: {
       colors: {
+        beige: {
+          50: '#F9F7F2',
+          100: '#F5F2EA',
+          200: '#E5E0D8',
+          300: '#D5CEC0',
+        },
         brand: {
-          50: '#eef2ff',
-          100: '#e0e7ff',
-          600: '#4f46e5',
-          700: '#4338ca',
-          900: '#1e1b4b'
+          green: '#5D7052', // Muted Green (Primary)
+          dark: '#2C332E',  // Charcoal Green (Text)
+          sage: '#A3B18A',  // Secondary
+          hover: '#4A5D45', // Darker Green
         }
+      },
+      fontFamily: {
+        serif: ['"Playfair Display"', 'Merriweather', 'serif'],
+        sans: ['"Inter"', 'sans-serif'],
       },
       fontFamily: {
         'sans': ['Inter', 'system-ui', 'sans-serif'],

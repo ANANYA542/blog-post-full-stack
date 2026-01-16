@@ -105,36 +105,33 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen">
+      {/* Hero Section */}
       {/* Hero Section */}
       {!user && (
-        <section className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 text-white overflow-hidden">
-          <div className="absolute inset-0 bg-black/20"></div>
-          <div className="relative container-responsive py-20">
-            <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fade-in">
-                A place to share knowledge and better understand the world
-              </h1>
-              <p className="text-xl md:text-2xl text-blue-100 mb-8 animate-slide-up">
-                Discover stories, thinking, and expertise from writers on any topic.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up">
-                <Link 
-                  to="/signup" 
-                  className="px-8 py-4 bg-white text-blue-600 rounded-full font-semibold hover:bg-blue-50 transition-colors text-lg"
-                >
-                  Start reading
-                </Link>
-                <Link 
-                  to="/login" 
-                  className="px-8 py-4 border-2 border-white/30 rounded-full font-semibold hover:bg-white/10 transition-colors text-lg"
-                >
-                  Sign in
-                </Link>
-              </div>
+        <section className="relative py-24 text-center">
+          <div className="container-responsive max-w-3xl mx-auto">
+            <h1 className="text-5xl md:text-6xl font-serif text-brand-dark mb-6 tracking-tight leading-tight">
+              Share what’s on your mind.
+            </h1>
+            <p className="text-xl text-brand-sage mb-10 font-light">
+              A quiet space for your thoughts, stories, and ideas.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link 
+                to="/signup" 
+                className="px-8 py-3 bg-brand-green text-white rounded-full font-medium hover:bg-brand-hover transition-all shadow-md hover:shadow-lg"
+              >
+                Start Writing
+              </Link>
+              <Link 
+                to="/login" 
+                className="px-8 py-3 text-brand-dark hover:text-brand-green font-medium transition-colors"
+              >
+                Read Stories
+              </Link>
             </div>
           </div>
-          <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-gray-50 dark:from-gray-900 to-transparent"></div>
         </section>
       )}
 

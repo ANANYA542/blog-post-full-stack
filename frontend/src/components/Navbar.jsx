@@ -1,78 +1,65 @@
 import { Link, NavLink } from 'react-router-dom'
-import { useAuth } from '../state/AuthContext.jsx'
-import ThemeToggle from './ThemeToggle.jsx'
+import { useAuth } from '../context/AuthContext.jsx'
 
 export default function Navbar() {
   const { user, logout } = useAuth()
+  
+  const navLinkClass = ({isActive}) => 
+    `text-sm font-medium transition-colors duration-200 ${
+      isActive ? 'text-brand-green' : 'text-brand-dark hover:text-brand-green'
+    }`
+
   return (
-    <header className="border-b border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-900/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-gray-900/60 sticky top-0 z-50">
+    <header className="sticky top-0 z-50 bg-beige-50/95 backdrop-blur border-b border-beige-200">
       <div className="container-responsive h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">Q</span>
+        <Link to="/" className="flex items-center gap-2 group">
+          <div className="w-8 h-8 flex items-center justify-center rounded-lg bg-brand-green/10 text-brand-green group-hover:bg-brand-green group-hover:text-white transition-colors">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
           </div>
-          <span className="font-bold text-xl text-gray-900 dark:text-white">Quill</span>
+          <span className="font-serif font-bold text-xl text-brand-dark tracking-tight">ThoughtFlow</span>
         </Link>
         
-        <nav className="flex items-center gap-6 text-sm">
-          <NavLink 
-            to="/" 
-            className={({isActive}) => `font-medium transition-colors ${
-              isActive ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
-            }`}
-          >
-            Home
-          </NavLink>
-          <NavLink 
-            to="/about" 
-            className={({isActive}) => `font-medium transition-colors ${
-              isActive ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
-            }`}
-          >
-            About
-          </NavLink>
-          
-          <ThemeToggle />
+        <nav className="flex items-center gap-8">
+          <ul className="hidden md:flex items-center gap-6">
+            <li><NavLink to="/" className={navLinkClass}>Reading List</NavLink></li>
+            <li><NavLink to="/about" className={navLinkClass}>About</NavLink></li>
+          </ul>
           
           {user ? (
             <div className="flex items-center gap-4">
               <NavLink 
-                to="/dashboard" 
-                className={({isActive}) => `font-medium transition-colors ${
-                  isActive ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
-                }`}
+                to="/create" 
+                className="hidden md:flex items-center gap-2 text-brand-dark hover:text-brand-green font-medium text-sm"
               >
-                Dashboard
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                Write
               </NavLink>
-              <NavLink 
-                to={`/profile/${user.username || 'me'}`} 
-                className={({isActive}) => `font-medium transition-colors ${
-                  isActive ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
-                }`}
-              >
-                Profile
-              </NavLink>
-              <button 
-                onClick={logout} 
-                className="px-4 py-2 rounded-lg bg-gray-900 dark:bg-gray-700 text-white hover:bg-gray-800 dark:hover:bg-gray-600 transition-colors"
-              >
-                Logout
-              </button>
+              
+              <div className="h-6 w-px bg-beige-200 hidden md:block"></div>
+
+              <div className="flex items-center gap-3">
+                 <span className="text-sm font-medium text-brand-dark">{user.name || user.email.split('@')[0]}</span>
+                 <button 
+                  onClick={logout} 
+                  className="text-sm text-brand-sage hover:text-brand-dark transition-colors"
+                >
+                  Log out
+                </button>
+              </div>
             </div>
           ) : (
-            <div className="flex items-center gap-3">
-              <NavLink 
-                to="/login" 
-                className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors font-medium"
-              >
-                Login
-              </NavLink>
-              <NavLink 
+            <div className="flex items-center gap-4">
+              <Link to="/login" className="text-sm font-medium text-brand-dark hover:text-brand-green">
+                Sign in
+              </Link>
+              <Link 
                 to="/signup" 
-                className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-medium"
+                className="px-4 py-2 rounded-full bg-brand-green text-white text-sm font-medium hover:bg-brand-hover transition-colors shadow-sm hover:shadow"
               >
-                Sign Up
-              </NavLink>
+                Get Started
+              </Link>
             </div>
           )}
         </nav>
