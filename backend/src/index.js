@@ -1,36 +1,26 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
+import express from "express";
+import cors from "cors";
+import serverless from "serverless-http";
 
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-}
-
-const authRoutes = require('./routes/auth');
-const postsRoutes = require('./routes/posts');
-const dashboardRoutes = require('./routes/dashboard');
-const categoriesRoutes = require('./routes/categories');
+import authRoutes from "./routes/auth.js";
+import postsRoutes from "./routes/posts.js";
+import dashboardRoutes from "./routes/dashboard.js";
+import categoriesRoutes from "./routes/categories.js";
 
 const app = express();
 
-/* CORS FIX */
-app.use(cors({
-  origin: "https://blog-post-full-stack-v94c.vercel.app",
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
-}));
+/* Same behavior as your working backend */
+app.use(cors());
+app.use(express.json());
 
-// Handle preflight requests
-app.options("*", cors());
+app.use("/api/auth", authRoutes);
+app.use("/api/posts", postsRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/categories", categoriesRoutes);
 
-app.use(bodyParser.json());
+app.get("/", (req, res) => {
+  res.send("Blog backend is live");
+});
 
-app.use('/api/auth', authRoutes);
-app.use('/api/posts', postsRoutes);
-app.use('/api/dashboard', dashboardRoutes);
-app.use('/api/categories', categoriesRoutes);
-
-app.get('/', (req, res) => res.send('Prisma blog backend'));
-
-module.exports = app;
+/* THIS makes it compatible with Vercel */
+export default serverless(app);
