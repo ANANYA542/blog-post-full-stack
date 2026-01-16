@@ -1,38 +1,40 @@
-import express from "express";
-import cors from "cors";
-import serverless from "serverless-http";
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
+const authRoutes = require('./routes/auth');
+const postsRoutes = require('./routes/posts');
+const dashboardRoutes = require('./routes/dashboard');
+const categoriesRoutes = require('./routes/categories');
 
 const app = express();
 
-/* Middleware */
-app.use(cors());
-app.use(express.json());
+/* CORS FIX */
+app.use(cors({
+  origin: true, // Allow all origins explicitly for now to fix blockers
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"],
+  credentials: true
+}));
 
-/* Health check */
-app.get("/health", (req, res) => {
-  res.json({ status: "Backend is running" });
-});
+// Handle preflight requests
+app.options("*", cors({
+  origin: true,
+  credentials: true
+}));
 
-/* Test route */
-app.get("/posts", (req, res) => {
-  res.json({
-    message: "Posts API working",
-    posts: []
-  });
-});
+app.use(bodyParser.json());
 
-/* Auth test */
-app.post("/auth/login", (req, res) => {
-  res.json({
-    message: "Login route working"
-  });
-});
+app.get('/', (req, res) => res.send('Prisma blog backend'));
+app.get('/heal', (req, res) => res.send('Prisma blog backend'));
 
-app.post("/auth/signup", (req, res) => {
-  res.json({
-    message: "Signup route working"
-  });
-});
+app.use('/api/auth', authRoutes);
+app.use('/api/posts', postsRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/categories', categoriesRoutes);
 
-/* IMPORTANT: no app.listen() */
-export default serverless(app);
+module.exports = app;
