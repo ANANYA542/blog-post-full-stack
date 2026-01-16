@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
-import { useAuth } from '../state/AuthContext.jsx'
+import { useAuth } from '../context/AuthContext.jsx'
 import api from '../utils/api.js'
 import FeaturedSection from '../components/FeaturedSection.jsx'
 import SectionCard from '../components/SectionCard.jsx'
@@ -64,6 +64,11 @@ export default function Home() {
           api.get('/posts?category=health-wellness'),
           api.get('/posts?category=art-culture')
         ])
+
+        // Fallback to mocks if data is empty (e.g. fresh production DB) 
+        if (scienceRes.data.length === 0 && techRes.data.length === 0) {
+           throw new Error("Empty Data");
+        }
 
         setSections({
           science: scienceRes.data.map(enrichPost),

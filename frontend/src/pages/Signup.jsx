@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAuth } from '../state/AuthContext.jsx'
+import { useAuth } from '../context/AuthContext.jsx'
 
 export default function Signup() {
   const { signup } = useAuth()
@@ -12,7 +12,13 @@ export default function Signup() {
     setLoading(true)
     setError('')
     try { await signup(form) }
-    catch (e) { setError(e.response?.data?.message || 'Signup failed') }
+    catch (e) { 
+      if (e.response && e.response.status === 409) {
+        setError("User already exists. Please log in.");
+      } else {
+        setError(e.response?.data?.message || 'Signup failed');
+      }
+    }
     finally { setLoading(false) }
   }
 

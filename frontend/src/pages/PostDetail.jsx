@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { useAuth } from "../state/AuthContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 import api from "../utils/api.js";
 import Loader from "../components/Loader.jsx";
 import CommentCard from "../components/CommentCard.jsx";
